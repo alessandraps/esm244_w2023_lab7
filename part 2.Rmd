@@ -110,5 +110,14 @@ sj_dgw_krige <- krige(dgbs ~ 1,
                       model = sj_dgw_vgm_fit)
 
 plot(sj_dgw_krige)
+
+krige_df <- as.data.frame(sj_dgw_krige) %>%
+  st_as_sf(coords = c("x", "y")) %>%
+  drop_na(var1.pred)
+st_crs(krige_df) <- 3857
+
+ggplot(data = krige_df) +
+  geom_sf(aes(color = var1.pred)) +
+  scale_color_gradient(low = "blue", high = "yellow")
 ```
 
